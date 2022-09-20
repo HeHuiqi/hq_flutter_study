@@ -1,49 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class HqFocusNodeState {
-  FocusNode? currentNode;
-  FocusNode? nextNode;
-  int currentIndex = 0;
-  bool isShowkeyboard = false;
-  HqFocusNodeState(
-      {this.currentNode,
-      this.nextNode,
-      required this.isShowkeyboard,
-      required this.currentIndex});
-  static HqFocusNodeState getFocusNodeState(List<FocusNode> nodes) {
-    FocusNode? currentNode;
-    FocusNode? nextNode;
-    bool show = false;
-    int currentIndex = 0;
-    for (var focusNode in nodes) {
-      if (focusNode.hasFocus) {
-        show = true;
-        break;
-      }
-      currentIndex++;
-    }
-    print('currentIndex:$currentIndex');
-    if (show && nodes.length > 1) {
-      if (currentIndex == 0) {
-        currentNode = nodes[currentIndex];
-        nextNode = nodes[currentIndex + 1];
-      } else if (currentIndex >= nodes.length - 1) {
-        currentNode = nodes[currentIndex - 1];
-        nextNode = nodes[currentIndex];
-      } else {
-        currentNode = nodes[currentIndex - 1];
-        nextNode = nodes[currentIndex + 1];
-      }
-    }
-    return HqFocusNodeState(
-        currentNode: currentNode,
-        nextNode: nextNode,
-        isShowkeyboard: show,
-        currentIndex: currentIndex);
-  }
-}
-
 class HqLoginToolBarPage extends StatefulWidget {
   const HqLoginToolBarPage({super.key});
 
@@ -52,43 +9,37 @@ class HqLoginToolBarPage extends StatefulWidget {
 }
 
 class _HqLoginToolBarPageState extends State<HqLoginToolBarPage> {
-  bool keyboardIsShow = false;
+  //注意焦点的数量要和输入框的数量要一致
   List<FocusNode> focusNodes = [
     FocusNode(),
     FocusNode(),
     FocusNode(),
     FocusNode()
   ];
-  FocusNode? currentFocusNode;
-  FocusNode? nextFocusNode;
+  late HqFocusNodeState focusNodeState;
 
   void focusNodeListener() {
-    HqFocusNodeState state = HqFocusNodeState.getFocusNodeState(focusNodes);
-    keyboardIsShow = state.isShowkeyboard;
-    currentFocusNode = state.currentNode;
-    nextFocusNode = state.nextNode;
+    //处理输入框焦点事件，获取最新的状态
+    focusNodeState = HqFocusNodeState.getFocusNodeState(focusNodes);
     //触发渲染
     setState(() {});
   }
 
   @override
   void initState() {
+    focusNodeState = HqFocusNodeState(isShowkeyboard: false);
     //为每个焦点添加监听
-    for (var focusNode in focusNodes) {
-      focusNode.addListener(focusNodeListener);
-    }
-    currentFocusNode = focusNodes[0];
-    nextFocusNode = focusNodes[0];
+    HqFocusNodeState.addFocusNodeLisenters(focusNodes, focusNodeListener);
+    //可以添加多个监听器
+    focusNodes[0].addListener(() { 
+    });
     super.initState();
   }
 
   @override
   void dispose() {
-    //要清楚每个焦点
-    for (var focusNode in focusNodes) {
-      focusNode.removeListener(focusNodeListener);
-      focusNode.dispose();
-    }
+    //要清除每个焦点的监听
+    HqFocusNodeState.removeFocusNodeLisenters(focusNodes, focusNodeListener);
     super.dispose();
   }
 
@@ -98,6 +49,7 @@ class _HqLoginToolBarPageState extends State<HqLoginToolBarPage> {
         appBar: AppBar(
           title: Text('HqLoginToolBar'),
         ),
+        //Stack布局很关键
         body: Stack(
           children: <Widget>[
             Positioned(
@@ -129,14 +81,14 @@ class _HqLoginToolBarPageState extends State<HqLoginToolBarPage> {
               ),
             ),
             Positioned(
-              // top: 0,
-              // left: 0,
-              // bottom: 0,
-              // right: 0,
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
               child: HqKeyBoardToolBar(
-                keyboardIsShow: keyboardIsShow,
-                preFocusNode: currentFocusNode,
-                nextFocusNode: nextFocusNode,
+                keyboardIsShow: focusNodeState.isShowkeyboard,
+                preFocusNode: focusNodeState.currentNode,
+                nextFocusNode: focusNodeState.nextNode,
               ),
               // child: Column(
               //   children: <Widget>[
@@ -181,6 +133,64 @@ class HqInputView extends StatelessWidget {
   }
 }
 
+class HqFocusNodeState {
+  FocusNode? currentNode;
+  FocusNode? nextNode;
+  int currentIndex;
+  bool isShowkeyboard = false;
+  HqFocusNodeState(
+      {this.currentNode,
+      this.nextNode,
+      required this.isShowkeyboard,
+      this.currentIndex = 0});
+  static HqFocusNodeState getFocusNodeState(List<FocusNode> nodes) {
+    FocusNode? currentNode;
+    FocusNode? nextNode;
+    bool show = false;
+    int currentIndex = 0;
+    for (var focusNode in nodes) {
+      if (focusNode.hasFocus) {
+        show = true;
+        break;
+      }
+      currentIndex++;
+    }
+    print('currentIndex:$currentIndex');
+    if (show && nodes.length > 1) {
+      if (currentIndex == 0) {
+        currentNode = nodes[currentIndex];
+        nextNode = nodes[currentIndex + 1];
+      } else if (currentIndex >= nodes.length - 1) {
+        currentNode = nodes[currentIndex - 1];
+        nextNode = nodes[currentIndex];
+      } else {
+        currentNode = nodes[currentIndex - 1];
+        nextNode = nodes[currentIndex + 1];
+      }
+    }
+    return HqFocusNodeState(
+        currentNode: currentNode,
+        nextNode: nextNode,
+        isShowkeyboard: show,
+        currentIndex: currentIndex);
+  }
+
+  static addFocusNodeLisenters(
+      List<FocusNode> nodes, void Function() listener) {
+    for (var focusNode in nodes) {
+      focusNode.addListener(listener);
+    }
+  }
+
+  static removeFocusNodeLisenters(
+      List<FocusNode> nodes, void Function() listener) {
+    for (var focusNode in nodes) {
+      focusNode.removeListener(listener);
+      focusNode.dispose();
+    }
+  }
+}
+
 class HqKeyBoardToolBar extends StatelessWidget {
   final bool keyboardIsShow;
   final FocusNode? preFocusNode;
@@ -195,6 +205,7 @@ class HqKeyBoardToolBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       //这里是为了占据剩余空间，由此将下面的组件挤到最底部
+      //这里十分关键
       Flexible(child: Container()),
       Divider(
         height: 1.0,
