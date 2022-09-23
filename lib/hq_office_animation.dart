@@ -88,11 +88,13 @@ class _DraggableCardState extends State<DraggableCard>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    // print('size:$size');
     return GestureDetector(
       onPanDown: (details) {
         _controller.stop();
       },
       onPanUpdate: (details) {
+        print('details:${details.delta}');
         setState(() {
           _dragAlignment += Alignment(
             details.delta.dx / (size.width / 2),

@@ -22,6 +22,8 @@ import 'hq_focus_demo.dart';
 import 'hq_custom_ps_input.dart';
 import 'hq_login_page.dart';
 import 'hq_key_board_toolbar.dart';
+import 'hq_gesture_detector.dart';
+import 'hq_animation.dart';
 
 class HqSutdyApp extends StatelessWidget {
   const HqSutdyApp({super.key});
@@ -58,6 +60,8 @@ class HqBody extends StatefulWidget {
   final List<Widget> studyItems = [
     HqGridViewPage(),
     HqAlertPage(),
+    HqBottomDrawerPage(),
+    HqAnimationPage(),
     HqCustomPasswodInputPage(),
     HqLoginPage(),
     HqLoginToolBarPage(),
@@ -144,7 +148,7 @@ class _HqBodyState extends State<HqBody> {
             children: _createItems(),
           ),
         )),
-        Text(isScrollTopBottom ? 'footer' : '')
+        isScrollTopBottom ? Text('footer') : Container(),
       ],
     );
   }
