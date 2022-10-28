@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>慕课网Wiki</title>
+    <style>
+        #imooc{
+            border:1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+	
+	<canvas id="imooc">您的浏览器不支持 HTML5 canvas 标签</canvas>
+	
+	<script>
+		const canvas = document.getElementById('imooc');
+		canvas.width=300
+		canvas.height=300
+		const ctx = canvas.getContext('2d');
+		
+		ctx.strokeStyle="#456795";
+		ctx.lineWidth=8;
+		
+		ctx.beginPath();
+		ctx.moveTo(40,40);
+		ctx.bezierCurveTo(160,20, 80,260, 200, 200);  //调用了直接绘制椭圆的函数
+		ctx.stroke();
+		
+		//绘制起点
+		ctx.beginPath();
+		ctx.arc(40,40,8,0,2*Math.PI)
+		ctx.fillStyle= "#888"
+		ctx.fill()
+		
+		//绘制控制点1
+		ctx.beginPath();
+		ctx.arc(260,150,8,0,2*Math.PI)
+		ctx.fillStyle= "#888"
+		ctx.fill()
+		
+		//绘制控制点2
+		ctx.beginPath();
+		ctx.arc(40,260,8,0,2*Math.PI)
+		ctx.fillStyle= "#888"
+		ctx.fill()
+		
+		
+		//绘制终点
+		ctx.beginPath();
+		ctx.arc(200, 200,8,0,2*Math.PI)
+		ctx.fillStyle= "#888"
+		ctx.fill()
+	</script>
+</body>
+</html>

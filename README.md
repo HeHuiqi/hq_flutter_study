@@ -21,3 +21,7 @@
 全局context解决方案
 https://pub.dev/packages/one_context
 https://pub.flutter-io.cn/packages/bot_toast
+
+
+//分组列表
+sticky_headers: ^0.3.0+2

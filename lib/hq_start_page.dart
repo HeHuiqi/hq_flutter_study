@@ -9,13 +9,13 @@ class HqMaterialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Flutter Turial',
-      home: HqHome(),
+      home: HqStartPage(),
     );
   }
 }
 
-class HqHome extends StatelessWidget {
-  const HqHome({super.key});
+class HqStartPage extends StatelessWidget {
+  const HqStartPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,23 +56,55 @@ class HqHome extends StatelessWidget {
               ]),
             ),
             Container(
-              height:50,
+              height: 50,
               color: Colors.blue,
-              child:Text('test'),
+              child: Text('test'),
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Flexible(child: 
+        Container(
+          height: 150,
+            child: ListView(
+              // 设置水平滚动
+              scrollDirection: Axis.horizontal,
           children: [
-            Image.asset('images/pic1.jpg'),
-            Image.asset('images/pic2.jpg'),
-            Image.asset('images/pic3.jpg'),
+            Image.asset(
+              'images/pic1.jpg',
+              // height: 100,
+            ),
+            SizedBox(width: 10,),
+            Image.asset(
+              'images/pic2.jpg',
+              // height: 100,
+            ),
+            SizedBox(width: 10,),
+            Image.asset(
+              'images/pic3.jpg',
+              // height: 100,
+            ),
+            SizedBox(width: 10,),
+             Image.asset(
+              'images/pic1.jpg',
+              height: 100,
+            ),
+            SizedBox(width: 10,),
+            Image.asset(
+              'images/pic2.jpg',
+              // height: 100,
+            ),
+            SizedBox(width: 10,),
+            Image.asset(
+              'images/pic3.jpg',
+              // height: 100,
+            ),
           ],
-        )
+        ))),
       ])),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
+      floatingActionButton:  FloatingActionButton(
+        onPressed:() {
+          print('floatingActionButton click');
+        },
         tooltip: 'Add',
         child: Icon(Icons.add),
       ),
