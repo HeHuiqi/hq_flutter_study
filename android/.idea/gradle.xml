@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$USER_HOME$/flutter_macos_2.0.6-stable/.pub-cache/hosted/pub.flutter-io.cn/ext_video_player-0.1.2/android" />
+            <option value="$USER_HOME$/flutter_macos_2.0.6-stable/.pub-cache/hosted/pub.flutter-io.cn/fluttertoast-8.1.1/android" />
+            <option value="$USER_HOME$/flutter_macos_2.0.6-stable/.pub-cache/hosted/pub.flutter-io.cn/shared_preferences_android-2.0.14/android" />
+            <option value="$PROJECT_DIR$/../../hq_device_info/android" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

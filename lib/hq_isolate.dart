@@ -5,7 +5,6 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
 class HqIsolatePage extends StatefulWidget {
   const HqIsolatePage({super.key});
 
@@ -25,47 +24,58 @@ class _HqIsolatePageState extends State<HqIsolatePage> {
   bool get showLoadingDialog => data.isEmpty;
 
   Future<void> loadData() async {
+    // 每个Isolate都有自己独立的空间和事件循环
+    // flutter 应用启动后，会创建一个主Isolate
+    // 相当于主进程和子进程一样，但是这里的子进程不共享主进程的空间，用于自己独立的空间，类似于沙盒
+    // 不同ioslate之间可以使用ReceivePort相互访问 
+    // 创建不同Isolate之间沟通的桥梁
     final ReceivePort receivePort = ReceivePort();
+    //开启一个Isolate拥有自己独立的空间执行任务，并传递主Isolate接收信息的端口
     await Isolate.spawn(dataLoader, receivePort.sendPort);
 
     // The 'echo' isolate sends its SendPort as the first message.
     final SendPort sendPort = await receivePort.first as SendPort;
-
-    final List<dynamic> msg = await sendReceive(
-      sendPort,
+    print('loadData-sendPort:${sendPort.hashCode}');
+    final List<dynamic> rspMsg = await sendReceive(
       'https://jsonplaceholder.typicode.com/posts',
+      sendPort,
     );
 
     setState(() {
-      data = msg;
+      data = rspMsg;
     });
   }
 
   // The entry point for the isolate.
   static Future<void> dataLoader(SendPort sendPort) async {
     // Open the ReceivePort for incoming messages.
+    // 打开一个端口接收其他isolate的消息
     final ReceivePort port = ReceivePort();
 
     // Notify any other isolates what port this isolate listens to.
+
+    //向其他的isolate发送我接受信息的端口
     sendPort.send(port.sendPort);
+    print('dataLoader-sendPort:${sendPort.hashCode}');
 
-    await for (final dynamic msg in port) {
-      final String url = msg[0] as String;
-      final SendPort replyTo = msg[1] as SendPort;
-
+    //处理接受到的信息
+    await for (final dynamic receivedMsg in port) {
+      print("dataLoader-receivedMsg:$receivedMsg");
+      final String url = receivedMsg[0] as String;
+      final SendPort replyTo = receivedMsg[1] as SendPort;
       final Uri dataURL = Uri.parse(url);
       final http.Response response = await http.get(dataURL);
-      // Lots of JSON to parse
-      // List<Map<String, dynamic>> list =  jsonDecode(response.body) as List<Map<String, dynamic>>;
-      // print('response.body:${response.body}');
-      List<dynamic> list =  jsonDecode(response.body);
+      List<dynamic> list = jsonDecode(response.body);
+      print('dataLoader-replyTo:${replyTo.hashCode}');
 
       replyTo.send(list);
     }
   }
 
-  Future<dynamic> sendReceive(SendPort port, String msg) {
+  Future<dynamic> sendReceive( String msg,SendPort port) {
+    print('sendReceive-port:${port.hashCode}');
     final ReceivePort response = ReceivePort();
+    //使用port向其他Isolate发送信息
     port.send([msg, response.sendPort]);
     return response.first;
   }
@@ -85,11 +95,16 @@ class _HqIsolatePageState extends State<HqIsolatePage> {
   }
 
   ListView getListView() {
-    return ListView.separated(itemBuilder: (context, index) {
-      return getRow(index);
-    },separatorBuilder: (context, index) {
-      return Divider(color: Colors.blue,);
-    },itemCount: data.length);
+    return ListView.separated(
+        itemBuilder: (context, index) {
+          return getRow(index);
+        },
+        separatorBuilder: (context, index) {
+          return Divider(
+            color: Colors.blue,
+          );
+        },
+        itemCount: data.length);
   }
 
   Widget getRow(int i) {

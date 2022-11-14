@@ -26,7 +26,7 @@ dependencies:
   # 国际化支持
   flutter_localizations:
     sdk: flutter
-
+  # 国际化库
   intl: ^0.17.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +44,10 @@ dependencies:
   fluttertoast: ^8.1.1
   ext_video_player: ^0.1.2
   # video_player: ^2.4.7
+  # 使用本地插件
+  hq_device_info:
+    # 指定本地插件目录
+    path: ../hq_device_info
 
 dev_dependencies:
   flutter_test:

@@ -72,6 +72,7 @@ class _HqStudyAppState extends State<HqStudyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // 监听变化
     return ChangeNotifierProvider(
       create: (context) {
         return HqLocaleProvider();
@@ -107,6 +108,8 @@ class _HqStudyAppState extends State<HqStudyApp> {
     // );
   }
 }
+
+
 
 class HqStudyList extends StatefulWidget {
   const HqStudyList({super.key});

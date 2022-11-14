@@ -1,8 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
-
-
+import 'package:hq_device_info/hq_device_info.dart';
 
 class HqTextPage extends StatefulWidget {
   const HqTextPage({super.key});
@@ -12,6 +11,21 @@ class HqTextPage extends StatefulWidget {
 }
 
 class _HqTextPageState extends State<HqTextPage> {
+  String _deviceInfo = "unkonwn";
+  final _hqDeviceInfoPlugin = HqDeviceInfo();
+  @override
+  void initState() {
+    super.initState();
+    getDeviceInfo();
+  }
+
+  void getDeviceInfo() async {
+    var dif = await _hqDeviceInfoPlugin.deviceInfo();
+    setState(() {
+      _deviceInfo = dif.toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +34,7 @@ class _HqTextPageState extends State<HqTextPage> {
       ),
       body: ListView(
         children: [
+          Text(_deviceInfo),
           _HqRichText(),
           _HqBox(
             bgColor: Colors.red,
@@ -32,7 +47,6 @@ class _HqTextPageState extends State<HqTextPage> {
     );
   }
 }
-
 
 class _HqRichText extends StatelessWidget {
   const _HqRichText({super.key});
@@ -55,7 +69,7 @@ class _HqRichText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TapGestureRecognizer _tapGestureRecognizer = TapGestureRecognizer();
-     _tapGestureRecognizer.onTap = () {
+    _tapGestureRecognizer.onTap = () {
       print('tapText');
       // Fluttertoast.showToast(msg: '你点击了服务协议!', gravity: ToastGravity.CENTER);
       showSnackBar(context);
