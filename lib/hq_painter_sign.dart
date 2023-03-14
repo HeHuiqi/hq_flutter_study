@@ -41,12 +41,13 @@ class _HqSignatureState extends State<_HqSignature> {
     );
   }
 }
-
+// 这是我们的画布
 class _HqSignaturePainter extends CustomPainter {
   _HqSignaturePainter(this.points);
 
   final List<Offset?> points;
 
+  //在这里绘制自己的想法
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
