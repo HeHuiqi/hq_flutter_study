@@ -24,9 +24,10 @@ class _HqLoginToolBarPageState extends State<HqLoginToolBarPage> {
   void focusNodeListener() {
     //处理输入框焦点事件，获取最新的状态
     focusNodeState = HqFocusNodeState.getFocusNodeState(focusNodes);
-    
+
     print("window.viewInsets2:${window.viewInsets}");
-    print('scrollController.position.maxScrollExtent:${scrollController.position.maxScrollExtent}');
+    print(
+        'scrollController.position.maxScrollExtent:${scrollController.position.maxScrollExtent}');
     print('scrollController.offset:${scrollController.offset}');
 
     /*
@@ -53,31 +54,32 @@ class _HqLoginToolBarPageState extends State<HqLoginToolBarPage> {
 
     //触发渲染
     setState(() {
-        if (focusNodeState.isShowkeyboard) {
-      print('focusNodeState.currentNode.size:${focusNodeState.currentNode?.size}');
-      print('focusNodeState.currentNode.offset:${focusNodeState.currentNode?.offset}');
+      if (focusNodeState.isShowkeyboard) {
+        print(
+            'focusNodeState.currentNode.size:${focusNodeState.currentNode?.size}');
+        print(
+            'focusNodeState.currentNode.offset:${focusNodeState.currentNode?.offset}');
 
-      // 48 输入框默认高度，40 toolbar高度
-      print('focusNodeState.currentIndex:${focusNodeState.currentIndex}');
-      double offset = 48.0 * (focusNodeState.currentIndex + 1) + 40;
-      double dy = focusNodeState.currentNode?.offset.dy ?? 0.0;
-      // offset = -(dy-520);
-      // offset = dy > 147 ? dy-147:147;
-      // if (offset > scrollController.position.maxScrollExtent) {
-      //   offset = scrollController.position.maxScrollExtent;
-      // }
-      // offset = 0.0;
-      // offset =   0;
-      print('offset:$offset');
-      if (offset > 0 && dy/2.0 > 147) {
-        
-      scrollController.animateTo(offset,
-          duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+        // 48 输入框默认高度，40 toolbar高度
+        print('focusNodeState.currentIndex:${focusNodeState.currentIndex}');
+        double offset = 48.0 * (focusNodeState.currentIndex + 1) + 40;
+        double dy = focusNodeState.currentNode?.offset.dy ?? 0.0;
+        // offset = -(dy-520);
+        // offset = dy > 147 ? dy-147:147;
+        // if (offset > scrollController.position.maxScrollExtent) {
+        //   offset = scrollController.position.maxScrollExtent;
+        // }
+        // offset = 0.0;
+        // offset =   0;
+        print('offset:$offset');
+        if (offset > 0 && dy / 2.0 > 147) {
+          scrollController.animateTo(offset,
+              duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+        }
+      } else {
+        scrollController.animateTo(0,
+            duration: Duration(milliseconds: 300), curve: Curves.easeIn);
       }
-    } else {
-      scrollController.animateTo(0,
-          duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-    }
     });
   }
 
@@ -88,7 +90,7 @@ class _HqLoginToolBarPageState extends State<HqLoginToolBarPage> {
 
     print("window.devicePixelRatio:${window.devicePixelRatio}");
     print("window.physicalSize:${window.physicalSize}");
-    print("window.physicalGeometry:${window.physicalGeometry}");
+    // print("window.physicalGeometry:${window.physicalGeometry}");
     // scrollController.addListener(() {
     //   // maxScrollExtent = scrollController.position.maxScrollExtent;
     //   // print('maxScrollExtent:$maxScrollExtent');
@@ -139,7 +141,10 @@ class _HqLoginToolBarPageState extends State<HqLoginToolBarPage> {
                     autofocus: false,
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                   ),
-                  HqInputView(hintText: '输入密码', focusNode: focusNodes[1],),
+                  HqInputView(
+                    hintText: '输入密码',
+                    focusNode: focusNodes[1],
+                  ),
                   HqInputView(hintText: '输入激活码', focusNode: focusNodes[2]),
                   HqInputView(hintText: '输入邀请码', focusNode: focusNodes[3]),
                   Container(

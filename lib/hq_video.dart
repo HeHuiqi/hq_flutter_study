@@ -16,7 +16,7 @@ class _HqVideoPageState extends State<HqVideoPage> {
     super.initState();
     var url =
         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4';
-    // url = 'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4';
+    // 'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4';
     _controller = VideoPlayerController.network(url);
 
     // _controller.initialize().then((_) {
@@ -34,7 +34,7 @@ class _HqVideoPageState extends State<HqVideoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Video player'),
+        title: Text('Video1 player'),
       ),
       body: Center(
         child: FutureBuilder(
@@ -53,7 +53,9 @@ class _HqVideoPageState extends State<HqVideoPage> {
               // loading spinner.
               return const Center(
                 // child: CircularProgressIndicator(),
-                child: CupertinoTextField(placeholder: '用户名',),
+                child: CupertinoTextField(
+                  placeholder: '用户名',
+                ),
               );
             }
           },

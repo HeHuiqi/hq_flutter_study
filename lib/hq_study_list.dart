@@ -3,6 +3,7 @@ import 'package:hq_study/hq_app_const.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hq_study/hq_bottom_tab.dart';
 import 'package:hq_study/hq_layout_app.dart';
+import 'package:hq_study/hq_router_observer.dart';
 // import 'package:intl/locale.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,8 +47,7 @@ import 'hq_intl.dart';
 import 'hq_ locale_provider.dart';
 import 'hq_painter_sign.dart';
 import 'hq_isolate.dart';
-
-
+import 'hq_life_circle_page.dart';
 
 class HqStudyApp extends StatefulWidget {
   const HqStudyApp({super.key});
@@ -55,6 +55,7 @@ class HqStudyApp extends StatefulWidget {
   @override
   State<HqStudyApp> createState() => _HqStudyAppState();
 }
+
 class _HqStudyAppState extends State<HqStudyApp> {
   int localIndex = HqLocalLanguageIndex.zh.hqIndex;
   _initLocalIndex() async {
@@ -81,7 +82,9 @@ class _HqStudyAppState extends State<HqStudyApp> {
         //订阅local变化
         return Consumer<HqLocaleProvider>(
             builder: (context, localProvider, child) {
-              localIndex = localProvider.localIndex < 0 ? localIndex:localProvider.localIndex;
+          localIndex = localProvider.localIndex < 0
+              ? localIndex
+              : localProvider.localIndex;
           return MaterialApp(
             // 设置全局唯一key，可以中用 navigatorStateKey.currentState.push()来做路由跳转了
             navigatorKey: navigatorStateKey,
@@ -91,6 +94,7 @@ class _HqStudyAppState extends State<HqStudyApp> {
             //默认语言
             locale: AppLocalizations.supportedLocales[localIndex],
             home: HqStudyList(),
+            navigatorObservers: [hqRouteObserver],
           );
         });
       },
@@ -109,8 +113,6 @@ class _HqStudyAppState extends State<HqStudyApp> {
   }
 }
 
-
-
 class HqStudyList extends StatefulWidget {
   const HqStudyList({super.key});
 
@@ -119,10 +121,9 @@ class HqStudyList extends StatefulWidget {
 }
 
 class _HqStudyListState extends State<HqStudyList> {
-
   @override
   Widget build(BuildContext context) {
-        AppLocalizations local = AppLocalizations.of(context);
+    AppLocalizations local = AppLocalizations.of(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -134,6 +135,7 @@ class _HqStudyListState extends State<HqStudyList> {
 
 class HqBody extends StatefulWidget {
   final List<Widget> studyItems = [
+    HqLifeCirclePage(),
     HqIsolatePage(),
     HqPainterSignPage(),
     HqIntlPage(),

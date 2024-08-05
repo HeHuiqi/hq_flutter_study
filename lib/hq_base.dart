@@ -8,7 +8,7 @@ class HqBasePage extends StatefulWidget {
 }
 
 class _HqBasePageState extends State<HqBasePage> {
-  List<String> titles = ['123', '123', '12321'];
+  List<String> titles = ['123', '12123213', '12321'];
   @override
   void initState() {
     for (var i = 0; i < 20; i++) {
@@ -26,7 +26,10 @@ class _HqBasePageState extends State<HqBasePage> {
       body: Align(
           child: Container(
         color: Colors.blue,
-        child: HqSegmentView(initSelctedIndex: 1, itemTitles: titles),
+        child: HqSegmentView(
+          initSelctedIndex: 1,
+          itemTitles: titles,
+        ),
       )),
     );
   }
@@ -77,7 +80,7 @@ class _HqSegmentViewState extends State<HqSegmentView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 30,
+                height: 36,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -93,7 +96,7 @@ class _HqSegmentViewState extends State<HqSegmentView> {
               Container(
                 color: Colors.white,
                 margin: const EdgeInsets.only(left: 10.0, right: 4.0),
-                child: Row( 
+                child: Row(
                   children: [Text('123')],
                 ),
               ),
